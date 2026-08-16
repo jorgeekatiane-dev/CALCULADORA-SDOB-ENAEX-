@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora SDOB - ENAEX</title>
+<title>Calculadora SDOB - ENAEX V4.0</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   body { background: #111; color: #fff; font-family: Arial; margin: 0; padding: 20px; }
@@ -14,116 +14,20 @@
   label { display: block; margin-top: 10px; font-weight: bold; font-size: 14px; }
   input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: none; background: #333; color: #fff; box-sizing: border-box; }
   .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-  button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+  button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
   .btn-calcular { background: #e30613; color: #fff; }
   .btn-limpar { background: #555; color: #fff; }
+  .btn-tabela { background: #28a745; color: #fff; }
   .btn-pdf { background: #007bff; color: #fff; margin-top: 15px; width: 100%; }
   .result { margin-top: 20px; background: #222; padding: 15px; border-radius: 8px; border-left: 4px solid #e30613; }
   .result h2 { margin-top: 0; color: #e30613; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+  th { background: #333; color: #e30613; }
   hr { border: 1px solid #333; margin: 15px 0; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="logo">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACCCAMAAADQNkiAAAAA1BMVEW10NBjBBbqAAAASElEQVR4nO3BgQAAAADDoPlTX+AIVQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDcaiAAFXDqg4AAAAAElFTkSuQmCC" alt="Logo ENAEX">
-  </div>
-  <h1>Calculadora SDOB</h1>
-  <form id="calcForm">
-    <label>Diâmetro do Furo (mm)</label>
-    <input type="number" id="diametro" placeholder="Ex: 140" required>
-    <label>Afastamento B (m)</label>
-    <input type="number" id="afastamento" placeholder="Ex: 2.2" step="0.1" required>
-    <label>Espaçamento S (m)</label>
-    <input type="number" id="espacamento" placeholder="Ex: 4.4" step="0.1" required>
-    <label>Altura do Banco H (m)</label>
-    <input type="number" id="altura" placeholder="Ex: 10" step="0.1" required>
-    <label>Tampão T (m)</label>
-    <input type="number" id="tampao" placeholder="Ex: 2.5" step="0.1" required>
-    <label>Densidade da Rocha (t/m³)</label>
-    <input type="text" id="densRocha" placeholder="Ex: 3,5" required>
-    <label>Densidade do Explosivo (g/cm³)</label>
-    <input type="text" id="densExpl" placeholder="Ex: 1,15" required>
-    <div class="btn-group">
-      <button type="submit" class="btn-calcular">Calcular</button>
-      <button type="button" class="btn-limpar" onclick="limpar()">Limpar</button>
-    </div>
-  </form>
-  <div class="result" id="resultado" style="display:none;"></div>
-  <button class="btn-pdf" onclick="exportarPDF()" style="display:none;" id="btnPdf">Exportar PDF</button>
-</div>
-<script>
-let dadosResultado = {};
-function toFloat(valor) { return parseFloat(valor.toString().replace(',', '.')); }
-
-document.getElementById('calcForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const d = toFloat(document.getElementById('diametro').value);
-  const B = toFloat(document.getElementById('afastamento').value);
-  const S = toFloat(document.getElementById('espacamento').value);
-  const H = toFloat(document.getElementById('altura').value);
-  const T = toFloat(document.getElementById('tampao').value);
-  const densRocha = toFloat(document.getElementById('densRocha').value);
-  const densExpl = toFloat(document.getElementById('densExpl').value);
-  
-  const pol = (d / 25.4).toFixed(2);
-  const comprimentoFuro = H;
-  const comprimentoCarga = H - T;
-  
-  // FÓRMULA CORRETA DA CARGA
-  const area = 0.785 * Math.pow(d/1000, 2);
-  const cargaRocha = area * densRocha * 1000;
-  const cargaExpl = area * densExpl * 1000;
-  const carga = Math.min(cargaRocha, cargaExpl);
-  
-  const total = carga * comprimentoCarga;
-  const cargaPorMetro = total / comprimentoFuro;
-  const sdob = B / Math.pow(carga, 0.33);
-  const lancamento = 18 * B; // PADRÃO ENAEX
-  
-  dadosResultado = {d, pol, B, S, H, comprimentoFuro, comprimentoCarga, carga, total, cargaPorMetro, sdob, lancamento};
-  
-  document.getElementById('resultado').innerHTML = `
-    <h2>Resultados</h2>
-    <p><b>Diâmetro:</b> ${d} mm = ${pol}"</p>
-    <p><b>Malha:</b> ${B} x ${S} m</p>
-    <p><b>Altura do Banco:</b> ${H} m</p>
-    <p><b>Comprimento do Furo:</b> ${comprimentoFuro.toFixed(2)} m</p>
-    <p><b>Comprimento de Carga:</b> ${comprimentoCarga.toFixed(2)} m</p>
-    <hr>
-    <p><b>Carga Estimada:</b> ${carga.toFixed(2)} kg/m</p>
-    <p><b>Total por Furo:</b> ${total.toFixed(2)} kg</p>
-    <p><b>Carga por Metro de Furo:</b> ${cargaPorMetro.toFixed(2)} kg/m</p>
-    <p><b>SDOB:</b> ${sdob.toFixed(2)}</p>
-    <p><b>Lançamento:</b> ${lancamento.toFixed(2)} m</p>
-  `;
-  document.getElementById('resultado').style.display = 'block';
-  document.getElementById('btnPdf').style.display = 'block';
-});
-
-function limpar() {
-  document.getElementById('calcForm').reset();
-  document.getElementById('resultado').style.display = 'none';
-  document.getElementById('btnPdf').style.display = 'none';
-}
-
-function exportarPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.setFontSize(18);
-  doc.text("Relatorio SDOB - ENAEX", 105, 15, {align: "center"});
-  doc.setFontSize(11);
-  let y = 35;
-  doc.text(`Diametro: ${dadosResultado.d} mm`, 10, y); y+=8;
-  doc.text(`Malha: ${dadosResultado.B} x ${dadosResultado.S} m`, 10, y); y+=8;
-  doc.text(`Altura: ${dadosResultado.H} m`, 10, y); y+=8;
-  doc.text(`Carga Estimada: ${dadosResultado.carga.toFixed(2)} kg/m`, 10, y); y+=8;
-  doc.text(`Total por Furo: ${dadosResultado.total.toFixed(2)} kg`, 10, y); y+=8;
-  doc.text(`SDOB: ${dadosResultado.sdob.toFixed(2)}`, 10, y); y+=8;
-  doc.text(`Lancamento: ${dadosResultado.lancamento.toFixed(2)} m`, 10, y);
-  doc.save("SDOB_ENAEX.pdf");
-}
-</script>
-</body>
-</html>
+    <img src="data:image/png
