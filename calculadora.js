@@ -1,0 +1,26 @@
+document.getElementById('calcForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const D = parseFloat(document.getElementById('diametro').value);
+    const B = parseFloat(document.getElementById('afastamento').value);
+    const S = parseFloat(document.getElementById('espacamento').value);
+    const H = parseFloat(document.getElementById('altura').value);
+    const T = parseFloat(document.getElementById('tampao').value);
+
+    const area = (Math.PI * Math.pow(D/1000, 2)) / 4;
+    const volume = area * H;
+    const compFuro = H - T;
+    const compCarga = compFuro * 0.8;
+    const cargaEstimada = volume * 0.9;
+    const sdob = B / Math.pow(cargaEstimada, 0.5);
+    const lancamento = B * 25;
+
+    document.getElementById('resultado').innerHTML = `
+        <p><b>Área:</b> ${area.toFixed(3)} m²</p>
+        <p><b>Volume:</b> ${volume.toFixed(2)} m³</p>
+        <p><b>Comp. Furo:</b> ${compFuro.toFixed(2)} m</p>
+        <p><b>Comp. Carga:</b> ${compCarga.toFixed(2)} m</p>
+        <p><b>Carga Estimada:</b> ${cargaEstimada.toFixed(2)} kg</p>
+        <p><b>SDOB:</b> ${sdob.toFixed(2)} m/kg^0.5</p>
+        <p><b>Lançamento:</b> ${lancamento.toFixed(2)} m</p>
+    `;
+});
