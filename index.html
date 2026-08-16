@@ -1,13 +1,35 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora SDOB Enaex</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Vale - Enaex</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Calculadora SDOB Enaex</h1>
-    <div id="calculadora"></div>
-    <script src="script.js"></script>
+  <div class="container">
+    <h1>Calculadora Vale - Enaex</h1>
+    
+    <label>Diâmetro do Furo (mm)</label>
+    <input type="number" id="diametro" step="1" placeholder="Ex: 165">
+
+    <label>Afastamento B (m)</label>
+    <input type="number" id="afastamento" step="0.1" placeholder="Ex: 4.0">
+
+    <label>Espaçamento S (m)</label>
+    <input type="number" id="espacamento" step="0.1" placeholder="Ex: 4.5">
+
+    <label>Altura do Banco H (m)</label>
+    <input type="number" id="altura" step="0.1" placeholder="Ex: 15">
+
+    <label>Tampão (m)</label>
+    <input type="number" id="tampao" step="0.1" placeholder="Ex: 2.5">
+
+    <button onclick="calcular()">Calcular</button>
+    
+    <div id="resultado"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
