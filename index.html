@@ -1,37 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Vale - Enaex</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora Vale - Enaex</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .container { background: #222; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 0 15px rgba(255,69,0,0.3); }
+    h1 { text-align: center; color: #ff4500; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input { width: 100%; padding: 10px; margin-top: 5px; border: none; border-radius: 5px; background: #333; color: #fff; }
+    button { width: 100%; padding: 12px; margin-top: 20px; background: #ff4500; color: #fff; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button:hover { background: #e03e00; }
+    #resultado { margin-top: 20px; padding: 15px; background: #333; border-radius: 5px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Calculadora Vale - Enaex</h1>
-        
-        <form id="calcForm">
-            <label for="diametro">Diâmetro do Furo (mm)</label>
-            <input type="number" id="diametro" step="any" required>
+  <div class="container">
+    <h1>Calculadora Vale - Enaex</h1>
+    <form id="calcForm">
+      <label>Diâmetro do Furo (mm)</label>
+      <input type="number" id="diametro" required>
+      
+      <label>Afastamento B (m)</label>
+      <input type="number" id="afastamento" step="0.01" required>
+      
+      <label>Espaçamento S (m)</label>
+      <input type="number" id="espacamento" step="0.01" required>
+      
+      <label>Altura do Banco H (m)</label>
+      <input type="number" id="altura" step="0.01" required>
+      
+      <label>Tampão (m)</label>
+      <input type="number" id="tampao" step="0.01" required>
+      
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="resultado"></div>
+  </div>
 
-            <label for="afastamento">Afastamento B (m)</label>
-            <input type="number" id="afastamento" step="any" required>
+  <script>
+    document.getElementById('calcForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const D = parseFloat(document.getElementById('diametro').value);
+      const B = parseFloat(document.getElementById('afastamento').value);
+      const S = parseFloat(document.getElementById('espacamento').value);
+      const H = parseFloat(document.getElementById('altura').value);
+      const T = parseFloat(document.getElementById('tampao').value);
 
-            <label for="espacamento">Espaçamento S (m)</label>
-            <input type="number" id="espacamento" step="any" required>
+      const area = (Math.PI * Math.pow(D/1000, 2)) / 4;
+      const volume = area * H;
+      const compFuro = H - T;
+      const compCarga = compFuro * 0.8;
+      const cargaEstimada = volume * 0.9;
+      const sdob = B / Math.pow(cargaEstimada, 0.5);
+      const lancamento = B * 25;
 
-            <label for="altura">Altura do Banco H (m)</label>
-            <input type="number" id="altura" step="any" required>
-
-            <label for="tampao">Tampão (m)</label>
-            <input type="number" id="tampao" step="any" required>
-
-            <button type="submit">Calcular</button>
-        </form>
-
-        <div id="resultado"></div>
-    </div>
-
-    <script src="calculadora.js"></script>
+      document.getElementById('resultado').innerHTML = `
+        <p><b>Área:</b> ${area.toFixed(3)} m²</p>
+        <p><b>Volume:</b> ${volume.toFixed(3)} m³</p>
+        <p><b>Comp. Furo:</b> ${compFuro.toFixed(2)} m</p>
+        <p><b>Comp. Carga:</b> ${compCarga.toFixed(2)} m</p>
+        <p><b>Carga Estimada:</b> ${cargaEstimada.toFixed(2)} kg</p>
+        <p><b>SDOB:</b> ${sdob.toFixed(2)} m/kg^0.5</p>
+        <p><b>Lançamento:</b> ${lancamento.toFixed(2)} m</p>
+      `;
+    });
+  </script>
 </body>
 </html>
