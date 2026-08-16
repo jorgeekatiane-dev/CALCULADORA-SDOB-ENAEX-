@@ -105,7 +105,9 @@
       const compCarga = compFuro * 0.8;
       const cargaEstimada = volume * 0.9;
       const sdob = B / Math.pow(cargaEstimada, 0.5);
-      const lancamento = B * 25;document.getElementById('resultado').innerHTML = `
+      const lancamento = B * 25;
+      
+      document.getElementById('resultado').innerHTML = `
         <p><b>Área:</b> ${area.toFixed(3)} m²</p>
         <p><b>Volume:</b> ${volume.toFixed(3)} m³</p>
         <p><b>Comp. Furo:</b> ${compFuro.toFixed(2)} m</p>
@@ -116,3 +118,5 @@
       `;
     });
   </script>
+</body>
+</html>
