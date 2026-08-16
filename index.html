@@ -29,19 +29,19 @@
   <h1>Calculadora SDOB</h1>
   <form id="calcForm">
     <label>Diâmetro do Furo (mm)</label>
-    <input type="number" id="diametro" value="270" required>
+    <input type="number" id="diametro" placeholder="Ex: 270" required>
     <label>Afastamento B (m)</label>
-    <input type="number" id="afastamento" value="8" step="0.1" required>
+    <input type="number" id="afastamento" placeholder="Ex: 8" step="0.1" required>
     <label>Espaçamento S (m)</label>
-    <input type="number" id="espacamento" value="9" step="0.1" required>
+    <input type="number" id="espacamento" placeholder="Ex: 9" step="0.1" required>
     <label>Altura do Banco H (m)</label>
-    <input type="number" id="altura" value="12" step="0.1" required>
+    <input type="number" id="altura" placeholder="Ex: 12" step="0.1" required>
     <label>Tampão T (m)</label>
-    <input type="number" id="tampao" value="3" step="0.1" required>
+    <input type="number" id="tampao" placeholder="Ex: 3" step="0.1" required>
     <label>Densidade da Rocha (t/m³)</label>
-    <input type="text" id="densRocha" value="3,5" required>
+    <input type="text" id="densRocha" placeholder="Ex: 3,5" required>
     <label>Densidade do Explosivo (g/cm³)</label>
-    <input type="text" id="densExpl" value="0,85" required>
+    <input type="text" id="densExpl" placeholder="Ex: 0,85" required>
     <div class="btn-group">
       <button type="submit" class="btn-calcular">Calcular</button>
       <button type="button" class="btn-limpar" onclick="limpar()">Limpar</button>
@@ -85,4 +85,29 @@ document.getElementById('calcForm').addEventListener('submit', function(e) {
     <p><b>Total por Furo:</b> ${total.toFixed(2)} kg</p>
     <p><b>Carga por Metro de Furo:</b> ${cargaPorMetro.toFixed(2)} kg/m</p>
     <p><b>SDOB:</b> ${sdob.toFixed(2)}</p>
-    <p><b>Lançamento:</b> ${lancamento.toFixed(2)}
+    <p><b>Lançamento:</b> ${lancamento.toFixed(2)} m</p>
+  `;
+  document.getElementById('resultado').style.display = 'block';
+  document.getElementById('btnPdf').style.display = 'block';
+});
+function limpar() {
+  document.getElementById('calcForm').reset();
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('btnPdf').style.display = 'none';
+}
+function exportarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.text("Relatorio SDOB - ENAEX", 10, 15);
+  doc.setFontSize(10);
+  let y = 30;
+  for(const [key, val] of Object.entries(dadosResultado)) {
+    doc.text(`${key}: ${val}`, 10, y);
+    y += 7;
+  }
+  doc.save("SDOB_ENAEX.pdf");
+}
+</script>
+</body>
+</html>
