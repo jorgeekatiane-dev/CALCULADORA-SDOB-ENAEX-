@@ -10,7 +10,8 @@ document.getElementById('calcForm').addEventListener('submit', function(e) {
     const volume = area * H;
     const compFuro = H - T;
     const compCarga = compFuro * 0.8;
-    const cargaEstimada = volume * 0.9;
+    const F = parseFloat(document.getElementById('fator').value);
+const cargaEstimada = volume * F / compCarga;
     const sdob = B / Math.pow(cargaEstimada, 0.5);
     const lancamento = B * 25;
 
