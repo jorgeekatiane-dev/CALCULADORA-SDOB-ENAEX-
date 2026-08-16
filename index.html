@@ -9,19 +9,34 @@
 <body>
     <div class="container">
         <h1>Calculadora Vale - Enaex</h1>
+        
         <form id="calcForm">
-            <label>Diâmetro do Furo (mm)</label>
+            <label for="diametro">Diâmetro do Furo (mm)</label>
             <input type="number" id="diametro" step="any" required>
-            <label>Afastamento B (m)</label>
+
+            <label for="afastamento">Afastamento B (m)</label>
             <input type="number" id="afastamento" step="any" required>
-            <label>Espaçamento S (m)</label>
+
+            <label for="espacamento">Espaçamento S (m)</label>
             <input type="number" id="espacamento" step="any" required>
-            <label>Altura do Banco H (m)</label>
+
+            <label for="altura">Altura do Banco H (m)</label>
             <input type="number" id="altura" step="any" required>
-            <label>Tampão (m)</label>
+
+            <label for="tampao">Tampão (m)</label>
             <input type="number" id="tampao" step="any" required>
+
             <button type="submit">Calcular</button>
         </form>
+
         <div id="resultado"></div>
     </div>
-       <script src="calculadora.js"></script>
+
+    <script src="calculadora.js"></script>
+</body>
+</html><button type="submit">Calcular</button>
+</form>
+
+<div id="resultado"></div>
+
+<script src="calculadora.js"></script>
